@@ -1,0 +1,21 @@
+import serial
+import time
+
+# ポート名は環境に合わせて変更してください (例: 'COM3' や '/dev/ttyUSB0')
+PORT = '/dev/ttyUSB0'
+
+ser = serial.Serial(PORT, 115200, timeout=1)
+time.sleep(1)
+
+def send_at(cmd):
+    full_cmd = cmd + "\r\n"
+    ser.write(full_cmd.encode('ascii'))
+    time.sleep(0.2)
+    res = ser.read_all().decode('utf-8', errors='ignore').strip()
+    print(f"送信: {repr(cmd)} ──► 応答: {repr(res)}")
+
+# テスト送信
+send_at("AT")
+send_at("AT+ADDRESS?")
+send_at("AT+NETWORKID?")
+send_at("AT+MODE?")
